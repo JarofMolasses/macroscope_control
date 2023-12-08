@@ -5,10 +5,12 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using System.Windows.Forms;
 using static System.Windows.Forms.LinkLabel;
 
@@ -27,7 +29,11 @@ namespace MECH423_Final_Project
         ConcurrentQueue<Int32> adcQueue = new ConcurrentQueue<Int32>(); // store data packet transmission
         ConcurrentQueue<Int32> xQueue = new ConcurrentQueue<Int32>();
         ConcurrentQueue<Int32> yQueue = new ConcurrentQueue<Int32>();
-        int outputByte; // holds output of TryDequeue operation
+
+        // SCPI queue
+        ConcurrentQueue<String> commandQueue = new ConcurrentQueue<String>();
+        ConcurrentQueue<String> debugMsgQueue = new ConcurrentQueue<String>();
+
 
         int runState = 0; // 0 for STOP, 1 for RUN
         int Xsteps = 0, Ysteps = 0;
@@ -38,19 +44,24 @@ namespace MECH423_Final_Project
         int UARTrate = 100; // [Hz] - 100 default
         bool UART_TFR_ON = false;
 
-        string bufferString;
-        string ADCstring, Xstring, Ystring;
+        bool bufferReady = true;
 
-        int adcCounts1, XpositionSteps, YpositionSteps;
+        /* unit conversion */
+        int adcCounts, XpositionSteps, YpositionSteps;
+        double zMM, xMM, yMM;
+        double counts_to_cN = 0.03;
+        double counts_offset = 0.00;
+        double force_to_mm = (1.0 / 19600) * 1000;  // 19600 cN/m
 
-        int sampleWidthX = 10, sampleWidthY = 10;
+        double sampleWidthX = 2, sampleWidthY = 2;
         double XYResolution = 0.5;
         double probeAdjustResolution = 1.0;
+        bool testRunning = false;
 
-        int Xmm2steps = 100, Ymm2steps = 100;
-        double Xsteps2mm = 1 / 100, Ysteps2mm = 1 / 100;
+        int Xmm2steps = 800, Ymm2steps = 400;
+        double Xsteps2mm = 1.0 / 800, Ysteps2mm = 1.0 / 400;
 
-        int sampleRows, sampleColumns, currentRow;
+        int sampleRows, sampleColumns; 
 
         // ~~~~~~~~~~~~~~~~~ FORM LOADING ~~~~~~~~~~~~~~~~~~~~~
         private void Form1_Load(object sender, EventArgs e)
@@ -112,11 +123,11 @@ namespace MECH423_Final_Project
             string bufferString = serialPort1.ReadLine();
             int adcCounts, Xposition, Yposition;
 
-            if (bufferString.StartsWith("__DATA__"))
+            if (bufferString.Contains("__DATA__"))
             {
                 string[] split = bufferString.Split(',');
 
-                Console.WriteLine(bufferString); // for debugging
+                //Console.WriteLine(bufferString); // for debugging
 
                 adcCounts = Convert.ToInt32(split[1]);
                 Xposition = Convert.ToInt32(split[2]);
@@ -125,6 +136,11 @@ namespace MECH423_Final_Project
                 adcQueue.Enqueue(adcCounts);
                 xQueue.Enqueue(Xposition);
                 yQueue.Enqueue(Yposition);
+            }
+
+            if (bufferString.Contains(">"))
+            {
+                bufferReady = true;
             }
         }
 
@@ -236,7 +252,7 @@ namespace MECH423_Final_Project
             updateStatusIcon();
             textBoxStatus.AppendText("E-STOP activated \r\n");
             sendSCPI("XY:DIS");
-            sendSCPI("coil:lift");
+            sendSCPI("coil:off");
         }
 
         private void buttonADCsps_Click(object sender, EventArgs e)
@@ -260,9 +276,44 @@ namespace MECH423_Final_Project
             sendSCPI("coil:drop");
         }
 
+        private void buttonADCoffs_Click(object sender, EventArgs e)
+        {
+            sendSCPI("adc:offs");
+        }
+
+        private void buttonCancelTest_Click(object sender, EventArgs e)
+        {
+            testRunning = false;
+            timer2.Enabled = false;
+            textBoxStatus.AppendText("Test paused by user\r\n");
+            buttonTestReset.Enabled = true;
+            bufferReady = true;
+        }
+
         private void buttonProbeEnable_Click(object sender, EventArgs e)
         {
             sendSCPI("coil:on");
+        }
+
+        private void buttonTestReset_Click(object sender, EventArgs e)
+        {
+            if(testRunning == false)
+            {
+                commandQueue = new ConcurrentQueue<String>();
+                debugMsgQueue = new ConcurrentQueue<String>();
+                textBoxStatus.AppendText("Command queue reset\r\n");
+                buttonStart.Text = "START MEASUREMENT";
+            }
+            else
+            {
+                textBoxStatus.AppendText("Cannot reset while test running\r\n");
+            }
+        }
+
+        private void buttonQuery_Click(object sender, EventArgs e)
+        {
+            sendSCPI("sys:log 0; pause 200; meas?");
+            bufferReady = true;         // Force true. Not necessarily the best but it works around sys:log toggling issues
         }
 
         private void buttonProbeDisable_Click(object sender, EventArgs e)
@@ -289,24 +340,29 @@ namespace MECH423_Final_Project
             sendSCPI("Y:step " + Ysteps);
         }
 
+        private void textBoxStatus_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void buttonDown_Click(object sender, EventArgs e)
         {
             probeAdjustResolution = (double)numericUpDownAdjust.Value;
-            Xsteps = (int)(probeAdjustResolution * Xmm2steps);
-            sendSCPI("X:step " + Xsteps);
+            Ysteps = (int)(probeAdjustResolution * Ymm2steps*-1);
+            sendSCPI("Y:step " + Ysteps);
         }
 
         private void buttonLeft_Click(object sender, EventArgs e)
         {
             probeAdjustResolution = (double)numericUpDownAdjust.Value;
-            Xsteps = (int)(probeAdjustResolution * Xmm2steps); // CHECK DIRECTIONS
+            Xsteps = (int)(probeAdjustResolution * Xmm2steps*-1); // CHECK DIRECTIONS
             sendSCPI("X:step " + Xsteps);
         }
 
         private void buttonRight_Click(object sender, EventArgs e)
         {
             probeAdjustResolution = (double)numericUpDownAdjust.Value;
-            Xsteps = (int)(probeAdjustResolution * Xmm2steps * -1); // CHECK DIRECTIONS
+            Xsteps = (int)(probeAdjustResolution * Xmm2steps); // CHECK DIRECTIONS
             sendSCPI("X:step " + Xsteps);
         }
 
@@ -328,32 +384,65 @@ namespace MECH423_Final_Project
             }
         }
 
+        private void startTest()
+        {
+            if (testRunning == true)
+            {
+                textBoxStatus.AppendText("Test already running\r\n");
+            }
+            if (testRunning == false && buttonStart.Text.Contains("RESUME MEASUREMENT"))
+            {
+                testRunning = true;
+                textBoxStatus.AppendText("Measurement started\r\n");
+                timer2.Enabled = true;          // Start the async timer
+            }
+            if (testRunning == false && buttonStart.Text.Contains("START MEASUREMENT"))
+            {
+                testRunning = true; // Reset this to start
+                buttonStart.Text = "RESUME MEASUREMENT";
+                buttonTestReset.Enabled = false;
+                textBoxStatus.AppendText("Measurement started\r\n");
+                timer2.Enabled = true;          // Start the async timer
+                sampleWidthX = (double)numericUpDownXWidth.Value;
+                sampleWidthY = (double)numericUpDownYWidth.Value;
+                XYResolution = (double)numericUpDownResolution.Value;
+
+                sampleRows = (int)(sampleWidthY / XYResolution) + 1;
+                sampleColumns = (int)(sampleWidthX / XYResolution) + 1;
+
+                int incrementX = (int)(XYResolution * Xmm2steps);
+                int incrementY = (int)(XYResolution * Ymm2steps);
+
+                int Xtarget = 0;
+                int Ytarget = 0;
+
+                sendSCPIasync("coil:lift; XY:sp 3000,3000; XY:abs 0,0; join", "SETUP\r\n");
+
+                for (int currentRow = 0; currentRow < sampleRows; currentRow++) // Step along Y axis
+                {
+                    sendSCPIasync("join;XY:sp 120,120", "SET SPEED\r\n");  // Set slow speed for scans
+                    Ytarget = incrementY * currentRow;
+                    sendSCPIasync("join;Y:abs " + (Ytarget), "INCREMENT Y\r\n");
+                    sendSCPIasync("join;coil:off", $"Measuring row {currentRow + 1} of {sampleRows}...\r\n");         // Drop or switch off coil for measurement                                                                                                 //textBoxStatus.AppendText("Measuring row " + (currentRow+1) + " of " + sampleRows + "...\r\n");
+                    sendSCPIasync("pause 600");
+                    for (int currentColumn = 0; currentColumn < sampleColumns; currentColumn++)
+                    {
+                        Xtarget = incrementX * currentColumn;
+                        sendSCPIasync("join;X:abs " + (Xtarget), "INCREMENT X\r\n");
+                        sendSCPIasync("join;pause 150", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
+                    }
+                    //sendSCPIasync("join", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
+                    sendSCPIasync("join; coil:lift", "LIFT PROBE\r\n");                       // Lift coil for travel
+                    sendSCPIasync("join; XY:sp 5000,5000; X:abs 0", "Row done\r\n");  // Reset X at fast speed
+                }
+                sendSCPIasync("join;coil:lift;XY:sp 4000,4000;XY:abs 0,0", "RESET PROBE\r\n");
+                sendSCPIasync("join;coil:off", "Measurement grid complete\r\n");
+            }
+        }
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            sampleWidthX = (int)numericUpDownXWidth.Value;
-            sampleWidthY = (int)numericUpDownYWidth.Value;
-            XYResolution = (double)numericUpDownResolution.Value;
-
-            sampleRows = (int) ((double)sampleWidthY / XYResolution);
-            sampleColumns = (int)((double)sampleWidthX / XYResolution);
-
-            // CONFIRM MEASUREMENT SEQUENCE AND ADD HERE...
-
-            for (currentRow = 1; currentRow <= sampleRows; currentRow++) // Step along Y axis
-            {
-                textBoxStatus.AppendText("Measuring row " + currentRow + " of " + sampleRows + "...\r\n");
-
-                for (currentColumn = 1; currentColumn <= sampleColumns; currentColumn++)
-                {
-                    // Scan along X-Axis for each row
-                }
-            }
-            textBoxStatus.AppendText("Measurement grid complete \r\n");
-
-            
-
+            startTest();
         }
-
         private void buttonClearStatus_Click(object sender, EventArgs e)
         {
             textBoxStatus.Text = ""; // Clear status messages
@@ -363,46 +452,119 @@ namespace MECH423_Final_Project
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (adcQueue.TryDequeue(out adcCounts1))
-                textBoxZPosition.Text = adcCounts1.ToString();
+            if (adcQueue.TryDequeue(out adcCounts))
+            {
+                zMM = counts_to_cN * adcCounts * force_to_mm;
+                textBoxZPosition.Text = adcCounts.ToString();
+            }
+                
             if (xQueue.TryDequeue(out XpositionSteps))
-                textBoxXPosition.Text = XpositionSteps.ToString();
+            {
+                xMM = XpositionSteps * Xsteps2mm;
+                textBoxXPosition.Text = (xMM).ToString("00.000");
+            }
             if (yQueue.TryDequeue(out YpositionSteps))
             {
-                textBoxYPosition.Text = YpositionSteps.ToString();
-                textBoxSerialIn.AppendText(adcCounts1.ToString() + " , " + XpositionSteps.ToString() + " , " + YpositionSteps.ToString() + " // ");
+                yMM = YpositionSteps * Ysteps2mm;
+                textBoxYPosition.Text = (yMM).ToString("00.000");
+                textBoxSerialIn.AppendText(adcCounts.ToString() + " , " + XpositionSteps.ToString() + " , " + YpositionSteps.ToString() + " // ");
                 
-                if (checkBoxSaveToFile.Checked == true) // Save to File if enabled
+               /* if (checkBoxSaveToFile.Checked == true) // Save to File if enabled
                 {
                     timeIntervals++;
                     outputFile.Write(timeIntervals.ToString() + ", " 
                                   + XpositionSteps.ToString() + ", " 
                                   + YpositionSteps.ToString() + ", " 
                                   + adcCounts1.ToString() + "\n");
+                }*/
+            }
+        }
+
+
+        // Timer2 specifically for async test execution
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen && (bufferReady))
+            {
+                bufferReady = false;
+                String output, debugOut;
+                if (commandQueue.TryDequeue(out output) && debugMsgQueue.TryDequeue(out debugOut))
+                {
+                    serialPort1.WriteLine(output);
+                    textBoxSerialOut.AppendText(output); // display outgoing string in text box
+                    textBoxSerialOut.AppendText(" // ");
+
+                    textBoxStatus.AppendText(debugOut);
+
+                    if (debugOut.Contains("MEASURE"))
+                    {
+                        string x = textBoxXPosition.Text;
+                        string y = textBoxYPosition.Text;
+                        string z = textBoxZPosition.Text;
+                        /*double x = xMM;
+                        double y = yMM;
+                        double z = adcCounts;*/
+                        textBoxStatus.AppendText($"{x},{y},{z}\r\n");
+                        if (checkBoxSaveToFile.Checked == true) // Save to File if enabled
+                        {
+                            outputFile.Write(x.ToString() + ", "
+                                           + y.ToString() + ", "
+                                           + z.ToString() + "\n");
+                        }
+                    }
+
+                    if (debugOut.Contains("Measurement grid complete\r\n"))
+                    {
+                        testRunning = false;
+                        buttonStart.Text = "START MEASUREMENT";
+                        timer2.Enabled = false;
+                    }
                 }
             }
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
-        {
-
-        }
-
         // ~~~~~~~~~~~~~~~~~ FUNCTIONS ~~~~~~~~~~~~~~~~~~~~~
+
+        private void clearDataQueues()
+        {
+            adcQueue = new ConcurrentQueue<int>();
+            xQueue = new ConcurrentQueue<int>();
+            yQueue = new ConcurrentQueue<int>();
+        }
         private void sendSCPI(string outputString)
         {
-            if (serialPort1.IsOpen)
-            {
-                serialPort1.WriteLine(outputString);
+            DateTime startTime, endTime;
+            startTime = DateTime.Now;
+            double timeout = 1000;
 
-                textBoxSerialOut.AppendText(outputString); // display outgoing string in text box
-                textBoxSerialOut.AppendText(" // ");
-            }
-            else
+            // This is blocking, with a 1 second timeout in case of desync.
+            while (true)
             {
-                // MessageBox.Show("ERROR: Serial port is not open. Cannot send data.");
-                textBoxStatus.AppendText("ERROR: Serial port is not open \r\n");
+                endTime = DateTime.Now;
+                Double elapsedMillisecs = ((TimeSpan)(endTime - startTime)).TotalMilliseconds;
+                if (serialPort1.IsOpen && (bufferReady||elapsedMillisecs > timeout))
+                {
+                    serialPort1.WriteLine(outputString);
+                    textBoxSerialOut.AppendText(outputString); // display outgoing string in text box
+                    textBoxSerialOut.AppendText(" // ");
+                    break;
+                }
+                else if (!serialPort1.IsOpen)
+                {
+                    // MessageBox.Show("ERROR: Serial port is not open. Cannot send data.");
+                    textBoxStatus.AppendText("ERROR: Serial port is not open\r\n");
+                    break;
+                }
+
+                bufferReady = false;
             }
+        }
+
+        private void sendSCPIasync(string outputString, string debugMsg = "")
+        {
+            // This is not blocking.
+            commandQueue.Enqueue(outputString);
+            debugMsgQueue.Enqueue(debugMsg);
         }
 
         private void updateStatusIcon()

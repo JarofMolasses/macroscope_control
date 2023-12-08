@@ -115,6 +115,10 @@
             this.buttonRight = new System.Windows.Forms.Button();
             this.buttonLeft = new System.Windows.Forms.Button();
             this.numericUpDownAdjust = new System.Windows.Forms.NumericUpDown();
+            this.buttonADCoffs = new System.Windows.Forms.Button();
+            this.buttonCancelTest = new System.Windows.Forms.Button();
+            this.buttonTestReset = new System.Windows.Forms.Button();
+            this.buttonQuery = new System.Windows.Forms.Button();
             label11 = new System.Windows.Forms.Label();
             labelXPosition = new System.Windows.Forms.Label();
             labelYPosition = new System.Windows.Forms.Label();
@@ -150,7 +154,7 @@
             // label11
             // 
             label11.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label11.Location = new System.Drawing.Point(6, 448);
+            label11.Location = new System.Drawing.Point(5, 535);
             label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label11.Name = "label11";
             label11.Size = new System.Drawing.Size(218, 20);
@@ -194,7 +198,7 @@
             // label8
             // 
             label8.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label8.Location = new System.Drawing.Point(6, 71);
+            label8.Location = new System.Drawing.Point(5, 78);
             label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label8.Name = "label8";
             label8.Size = new System.Drawing.Size(218, 20);
@@ -327,7 +331,7 @@
             // 
             label12.AutoSize = true;
             label12.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label12.Location = new System.Drawing.Point(258, 236);
+            label12.Location = new System.Drawing.Point(257, 243);
             label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label12.Name = "label12";
             label12.Size = new System.Drawing.Size(31, 17);
@@ -337,7 +341,7 @@
             // label2
             // 
             label2.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label2.Location = new System.Drawing.Point(9, 308);
+            label2.Location = new System.Drawing.Point(8, 395);
             label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(218, 20);
@@ -393,7 +397,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label17.Location = new System.Drawing.Point(671, 347);
+            label17.Location = new System.Drawing.Point(655, 483);
             label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label17.Name = "label17";
             label17.Size = new System.Drawing.Size(135, 23);
@@ -425,7 +429,7 @@
             // 
             // timer2
             // 
-            this.timer2.Enabled = true;
+            this.timer2.Interval = 1;
             this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
             // 
             // labelSerial
@@ -466,7 +470,7 @@
             // buttonFilename
             // 
             this.buttonFilename.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonFilename.Location = new System.Drawing.Point(8, 472);
+            this.buttonFilename.Location = new System.Drawing.Point(7, 559);
             this.buttonFilename.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFilename.Name = "buttonFilename";
             this.buttonFilename.Size = new System.Drawing.Size(128, 25);
@@ -478,7 +482,7 @@
             // textBoxFileName
             // 
             this.textBoxFileName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxFileName.Location = new System.Drawing.Point(8, 507);
+            this.textBoxFileName.Location = new System.Drawing.Point(7, 594);
             this.textBoxFileName.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxFileName.Name = "textBoxFileName";
             this.textBoxFileName.Size = new System.Drawing.Size(248, 23);
@@ -487,7 +491,7 @@
             // checkBoxSaveToFile
             // 
             this.checkBoxSaveToFile.AutoSize = true;
-            this.checkBoxSaveToFile.Location = new System.Drawing.Point(152, 478);
+            this.checkBoxSaveToFile.Location = new System.Drawing.Point(151, 565);
             this.checkBoxSaveToFile.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSaveToFile.Name = "checkBoxSaveToFile";
             this.checkBoxSaveToFile.Size = new System.Drawing.Size(108, 17);
@@ -647,7 +651,7 @@
             // buttonClearOutgoing
             // 
             this.buttonClearOutgoing.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClearOutgoing.Location = new System.Drawing.Point(9, 193);
+            this.buttonClearOutgoing.Location = new System.Drawing.Point(8, 200);
             this.buttonClearOutgoing.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClearOutgoing.Name = "buttonClearOutgoing";
             this.buttonClearOutgoing.Size = new System.Drawing.Size(267, 28);
@@ -658,7 +662,7 @@
             // 
             // textBoxSerialOut
             // 
-            this.textBoxSerialOut.Location = new System.Drawing.Point(9, 93);
+            this.textBoxSerialOut.Location = new System.Drawing.Point(8, 100);
             this.textBoxSerialOut.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSerialOut.Multiline = true;
             this.textBoxSerialOut.Name = "textBoxSerialOut";
@@ -668,7 +672,7 @@
             // buttonClearIncoming
             // 
             this.buttonClearIncoming.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClearIncoming.Location = new System.Drawing.Point(8, 408);
+            this.buttonClearIncoming.Location = new System.Drawing.Point(7, 495);
             this.buttonClearIncoming.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClearIncoming.Name = "buttonClearIncoming";
             this.buttonClearIncoming.Size = new System.Drawing.Size(267, 28);
@@ -679,7 +683,7 @@
             // 
             // textBoxSerialIn
             // 
-            this.textBoxSerialIn.Location = new System.Drawing.Point(9, 330);
+            this.textBoxSerialIn.Location = new System.Drawing.Point(8, 417);
             this.textBoxSerialIn.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSerialIn.Multiline = true;
             this.textBoxSerialIn.Name = "textBoxSerialIn";
@@ -939,18 +943,18 @@
             // textBoxUARTdataRate
             // 
             this.textBoxUARTdataRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxUARTdataRate.Location = new System.Drawing.Point(177, 231);
+            this.textBoxUARTdataRate.Location = new System.Drawing.Point(176, 238);
             this.textBoxUARTdataRate.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxUARTdataRate.Name = "textBoxUARTdataRate";
             this.textBoxUARTdataRate.Size = new System.Drawing.Size(78, 28);
             this.textBoxUARTdataRate.TabIndex = 267;
-            this.textBoxUARTdataRate.Text = "100";
+            this.textBoxUARTdataRate.Text = "50";
             this.textBoxUARTdataRate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // buttonUARTdataRate
             // 
             this.buttonUARTdataRate.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonUARTdataRate.Location = new System.Drawing.Point(9, 231);
+            this.buttonUARTdataRate.Location = new System.Drawing.Point(8, 238);
             this.buttonUARTdataRate.Margin = new System.Windows.Forms.Padding(2);
             this.buttonUARTdataRate.Name = "buttonUARTdataRate";
             this.buttonUARTdataRate.Size = new System.Drawing.Size(164, 28);
@@ -962,7 +966,7 @@
             // buttonStartUART
             // 
             this.buttonStartUART.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStartUART.Location = new System.Drawing.Point(9, 264);
+            this.buttonStartUART.Location = new System.Drawing.Point(8, 271);
             this.buttonStartUART.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStartUART.Name = "buttonStartUART";
             this.buttonStartUART.Size = new System.Drawing.Size(164, 28);
@@ -974,7 +978,7 @@
             // textBoxUARTonOff
             // 
             this.textBoxUARTonOff.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxUARTonOff.Location = new System.Drawing.Point(178, 264);
+            this.textBoxUARTonOff.Location = new System.Drawing.Point(177, 271);
             this.textBoxUARTonOff.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxUARTonOff.Name = "textBoxUARTonOff";
             this.textBoxUARTonOff.Size = new System.Drawing.Size(78, 28);
@@ -996,7 +1000,7 @@
             this.buttonStart.BackColor = System.Drawing.Color.PaleGreen;
             this.buttonStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonStart.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStart.Location = new System.Drawing.Point(674, 219);
+            this.buttonStart.Location = new System.Drawing.Point(674, 212);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(217, 47);
@@ -1007,6 +1011,7 @@
             // 
             // numericUpDownXWidth
             // 
+            this.numericUpDownXWidth.DecimalPlaces = 1;
             this.numericUpDownXWidth.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownXWidth.Location = new System.Drawing.Point(675, 59);
             this.numericUpDownXWidth.Margin = new System.Windows.Forms.Padding(2);
@@ -1019,13 +1024,14 @@
             this.numericUpDownXWidth.Size = new System.Drawing.Size(142, 28);
             this.numericUpDownXWidth.TabIndex = 278;
             this.numericUpDownXWidth.Value = new decimal(new int[] {
-            10,
+            2,
             0,
             0,
             0});
             // 
             // numericUpDownYWidth
             // 
+            this.numericUpDownYWidth.DecimalPlaces = 1;
             this.numericUpDownYWidth.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.numericUpDownYWidth.Location = new System.Drawing.Point(675, 115);
             this.numericUpDownYWidth.Margin = new System.Windows.Forms.Padding(2);
@@ -1038,7 +1044,7 @@
             this.numericUpDownYWidth.Size = new System.Drawing.Size(142, 28);
             this.numericUpDownYWidth.TabIndex = 279;
             this.numericUpDownYWidth.Value = new decimal(new int[] {
-            10,
+            2,
             0,
             0,
             0});
@@ -1063,27 +1069,29 @@
             this.numericUpDownResolution.Size = new System.Drawing.Size(141, 28);
             this.numericUpDownResolution.TabIndex = 280;
             this.numericUpDownResolution.Value = new decimal(new int[] {
-            5,
+            1,
             0,
             0,
             65536});
             // 
             // textBoxStatus
             // 
-            this.textBoxStatus.Location = new System.Drawing.Point(674, 379);
+            this.textBoxStatus.Location = new System.Drawing.Point(658, 515);
             this.textBoxStatus.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxStatus.Multiline = true;
             this.textBoxStatus.Name = "textBoxStatus";
-            this.textBoxStatus.Size = new System.Drawing.Size(385, 90);
+            this.textBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxStatus.Size = new System.Drawing.Size(273, 127);
             this.textBoxStatus.TabIndex = 284;
+            this.textBoxStatus.TextChanged += new System.EventHandler(this.textBoxStatus_TextChanged);
             // 
             // buttonClearStatus
             // 
             this.buttonClearStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClearStatus.Location = new System.Drawing.Point(837, 343);
+            this.buttonClearStatus.Location = new System.Drawing.Point(794, 479);
             this.buttonClearStatus.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClearStatus.Name = "buttonClearStatus";
-            this.buttonClearStatus.Size = new System.Drawing.Size(222, 32);
+            this.buttonClearStatus.Size = new System.Drawing.Size(137, 32);
             this.buttonClearStatus.TabIndex = 285;
             this.buttonClearStatus.Text = "Clear Status Messages";
             this.buttonClearStatus.UseVisualStyleBackColor = true;
@@ -1162,12 +1170,56 @@
             0,
             0});
             // 
+            // buttonADCoffs
+            // 
+            this.buttonADCoffs.Location = new System.Drawing.Point(446, 480);
+            this.buttonADCoffs.Name = "buttonADCoffs";
+            this.buttonADCoffs.Size = new System.Drawing.Size(142, 30);
+            this.buttonADCoffs.TabIndex = 292;
+            this.buttonADCoffs.Text = "ADC set offset";
+            this.buttonADCoffs.UseVisualStyleBackColor = true;
+            this.buttonADCoffs.Click += new System.EventHandler(this.buttonADCoffs_Click);
+            // 
+            // buttonCancelTest
+            // 
+            this.buttonCancelTest.Location = new System.Drawing.Point(674, 269);
+            this.buttonCancelTest.Name = "buttonCancelTest";
+            this.buttonCancelTest.Size = new System.Drawing.Size(128, 43);
+            this.buttonCancelTest.TabIndex = 293;
+            this.buttonCancelTest.Text = "PAUSE MEASUREMENT";
+            this.buttonCancelTest.UseVisualStyleBackColor = true;
+            this.buttonCancelTest.Click += new System.EventHandler(this.buttonCancelTest_Click);
+            // 
+            // buttonTestReset
+            // 
+            this.buttonTestReset.Location = new System.Drawing.Point(674, 318);
+            this.buttonTestReset.Name = "buttonTestReset";
+            this.buttonTestReset.Size = new System.Drawing.Size(128, 42);
+            this.buttonTestReset.TabIndex = 294;
+            this.buttonTestReset.Text = "RESET TEST";
+            this.buttonTestReset.UseVisualStyleBackColor = true;
+            this.buttonTestReset.Click += new System.EventHandler(this.buttonTestReset_Click);
+            // 
+            // buttonQuery
+            // 
+            this.buttonQuery.Location = new System.Drawing.Point(323, 365);
+            this.buttonQuery.Name = "buttonQuery";
+            this.buttonQuery.Size = new System.Drawing.Size(293, 28);
+            this.buttonQuery.TabIndex = 295;
+            this.buttonQuery.Text = "Query measurement";
+            this.buttonQuery.UseVisualStyleBackColor = true;
+            this.buttonQuery.Click += new System.EventHandler(this.buttonQuery_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1082, 653);
+            this.ClientSize = new System.Drawing.Size(1084, 653);
+            this.Controls.Add(this.buttonQuery);
+            this.Controls.Add(this.buttonTestReset);
+            this.Controls.Add(this.buttonCancelTest);
+            this.Controls.Add(this.buttonADCoffs);
             this.Controls.Add(this.numericUpDownAdjust);
             this.Controls.Add(label18);
             this.Controls.Add(this.buttonLeft);
@@ -1330,6 +1382,10 @@
         private System.Windows.Forms.Button buttonRight;
         private System.Windows.Forms.Button buttonLeft;
         private System.Windows.Forms.NumericUpDown numericUpDownAdjust;
+        private System.Windows.Forms.Button buttonADCoffs;
+        private System.Windows.Forms.Button buttonCancelTest;
+        private System.Windows.Forms.Button buttonTestReset;
+        private System.Windows.Forms.Button buttonQuery;
     }
 }
 
