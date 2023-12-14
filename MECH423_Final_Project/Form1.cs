@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using static System.Windows.Forms.LinkLabel;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace MECH423_Final_Project
 {
@@ -61,7 +62,8 @@ namespace MECH423_Final_Project
         int Xmm2steps = 800, Ymm2steps = 400;
         double Xsteps2mm = 1.0 / 800, Ysteps2mm = 1.0 / 400;
 
-        int sampleRows, sampleColumns; 
+        int sampleRows, sampleColumns;
+        int maxPlotDataPoints = 30;
 
         // ~~~~~~~~~~~~~~~~~ FORM LOADING ~~~~~~~~~~~~~~~~~~~~~
         private void Form1_Load(object sender, EventArgs e)
@@ -176,7 +178,10 @@ namespace MECH423_Final_Project
 
         private void buttonHomeXY_Click(object sender, EventArgs e)
         {
-            sendSCPI("home");
+            String homeCmd = "coil:lift; XY:SP 3000,3000; Join; XY:abs 0,0; Join; coil:off; XY:SP 100,100";
+            sendSCPI(homeCmd);
+            textBoxStepperSpeedX.Text = 100.ToString();
+            textBoxStepperSpeedY.Text = 100.ToString();
         }
 
         private void buttonZeroX_Click(object sender, EventArgs e)
@@ -366,6 +371,16 @@ namespace MECH423_Final_Project
             sendSCPI("X:step " + Xsteps);
         }
 
+        private void buttonSendManualCommand_Click(object sender, EventArgs e)
+        {
+            sendSCPI(textBoxManualCommand.Text);
+        }
+
+        private void buttonClearChart_Click(object sender, EventArgs e)
+        {
+            chart1.Series["Zdata"].Points.Clear();
+        }
+
         private void buttonStartUART_Click(object sender, EventArgs e)
         {
             if (UART_TFR_ON == false)
@@ -510,6 +525,14 @@ namespace MECH423_Final_Project
                             outputFile.Write(x.ToString() + ", "
                                            + y.ToString() + ", "
                                            + z.ToString() + "\n");
+                        }
+
+                        chart1.Series["Zdata"].Points.AddY(Convert.ToInt32(z));
+
+                        if (chart1.Series["Zdata"].Points.Count() >= maxPlotDataPoints)
+                        {
+                            chart1.Series["Zdata"].Points.RemoveAt(0);
+                            chart1.ResetAutoValues();
                         }
                     }
 
