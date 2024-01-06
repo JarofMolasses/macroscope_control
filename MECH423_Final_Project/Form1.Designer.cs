@@ -56,6 +56,7 @@
             System.Windows.Forms.Label label19;
             System.Windows.Forms.Label label20;
             System.Windows.Forms.Label label21;
+            System.Windows.Forms.Label label22;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -126,6 +127,7 @@
             this.textBoxManualCommand = new System.Windows.Forms.TextBox();
             this.buttonSendManualCommand = new System.Windows.Forms.Button();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.numericUpDownScanSpeed = new System.Windows.Forms.NumericUpDown();
             label11 = new System.Windows.Forms.Label();
             labelXPosition = new System.Windows.Forms.Label();
             labelYPosition = new System.Windows.Forms.Label();
@@ -153,18 +155,20 @@
             label19 = new System.Windows.Forms.Label();
             label20 = new System.Windows.Forms.Label();
             label21 = new System.Windows.Forms.Label();
+            label22 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_Status)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownXWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownYWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResolution)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAdjust)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScanSpeed)).BeginInit();
             this.SuspendLayout();
             // 
             // label11
             // 
             label11.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label11.Location = new System.Drawing.Point(689, 215);
+            label11.Location = new System.Drawing.Point(695, 278);
             label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label11.Name = "label11";
             label11.Size = new System.Drawing.Size(218, 20);
@@ -176,7 +180,7 @@
             // 
             labelXPosition.AutoSize = true;
             labelXPosition.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            labelXPosition.Location = new System.Drawing.Point(966, 317);
+            labelXPosition.Location = new System.Drawing.Point(972, 380);
             labelXPosition.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelXPosition.Name = "labelXPosition";
             labelXPosition.Size = new System.Drawing.Size(111, 19);
@@ -187,7 +191,7 @@
             // 
             labelYPosition.AutoSize = true;
             labelYPosition.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            labelYPosition.Location = new System.Drawing.Point(966, 352);
+            labelYPosition.Location = new System.Drawing.Point(972, 415);
             labelYPosition.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelYPosition.Name = "labelYPosition";
             labelYPosition.Size = new System.Drawing.Size(111, 19);
@@ -198,7 +202,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label1.Location = new System.Drawing.Point(916, 392);
+            label1.Location = new System.Drawing.Point(922, 455);
             label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(162, 19);
@@ -220,7 +224,7 @@
             // 
             labelADC.AutoSize = true;
             labelADC.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            labelADC.Location = new System.Drawing.Point(304, 408);
+            labelADC.Location = new System.Drawing.Point(304, 375);
             labelADC.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelADC.Name = "labelADC";
             labelADC.Size = new System.Drawing.Size(44, 23);
@@ -231,7 +235,7 @@
             // 
             labelSPS.AutoSize = true;
             labelSPS.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            labelSPS.Location = new System.Drawing.Point(588, 445);
+            labelSPS.Location = new System.Drawing.Point(588, 412);
             labelSPS.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelSPS.Name = "labelSPS";
             labelSPS.Size = new System.Drawing.Size(71, 17);
@@ -242,7 +246,7 @@
             // 
             labelProbe.AutoSize = true;
             labelProbe.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            labelProbe.Location = new System.Drawing.Point(304, 563);
+            labelProbe.Location = new System.Drawing.Point(304, 567);
             labelProbe.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             labelProbe.Name = "labelProbe";
             labelProbe.Size = new System.Drawing.Size(64, 23);
@@ -253,7 +257,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label3.Location = new System.Drawing.Point(590, 673);
+            label3.Location = new System.Drawing.Point(590, 677);
             label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(31, 17);
@@ -351,7 +355,7 @@
             // label2
             // 
             label2.Font = new System.Drawing.Font("Calibri", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label2.Location = new System.Drawing.Point(8, 495);
+            label2.Location = new System.Drawing.Point(11, 572);
             label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(218, 20);
@@ -407,7 +411,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            label17.Location = new System.Drawing.Point(690, 531);
+            label17.Location = new System.Drawing.Point(692, 595);
             label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             label17.Name = "label17";
             label17.Size = new System.Drawing.Size(135, 23);
@@ -457,6 +461,18 @@
             label21.Size = new System.Drawing.Size(103, 17);
             label21.TabIndex = 301;
             label21.Text = "Y Stepper Speed:";
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Cursor = System.Windows.Forms.Cursors.Arrow;
+            label22.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            label22.Location = new System.Drawing.Point(691, 218);
+            label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            label22.Name = "label22";
+            label22.Size = new System.Drawing.Size(133, 19);
+            label22.TabIndex = 303;
+            label22.Text = "Scan speed [mm/s]";
             // 
             // serialPort1
             // 
@@ -513,7 +529,7 @@
             // buttonFilename
             // 
             this.buttonFilename.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonFilename.Location = new System.Drawing.Point(690, 239);
+            this.buttonFilename.Location = new System.Drawing.Point(696, 302);
             this.buttonFilename.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFilename.Name = "buttonFilename";
             this.buttonFilename.Size = new System.Drawing.Size(141, 25);
@@ -525,7 +541,7 @@
             // textBoxFileName
             // 
             this.textBoxFileName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxFileName.Location = new System.Drawing.Point(690, 271);
+            this.textBoxFileName.Location = new System.Drawing.Point(696, 334);
             this.textBoxFileName.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxFileName.Name = "textBoxFileName";
             this.textBoxFileName.Size = new System.Drawing.Size(465, 23);
@@ -534,9 +550,7 @@
             // checkBoxSaveToFile
             // 
             this.checkBoxSaveToFile.AutoSize = true;
-            this.checkBoxSaveToFile.Checked = true;
-            this.checkBoxSaveToFile.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxSaveToFile.Location = new System.Drawing.Point(848, 245);
+            this.checkBoxSaveToFile.Location = new System.Drawing.Point(854, 308);
             this.checkBoxSaveToFile.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxSaveToFile.Name = "checkBoxSaveToFile";
             this.checkBoxSaveToFile.Size = new System.Drawing.Size(108, 17);
@@ -602,7 +616,7 @@
             // textBoxXPosition
             // 
             this.textBoxXPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxXPosition.Location = new System.Drawing.Point(1082, 313);
+            this.textBoxXPosition.Location = new System.Drawing.Point(1088, 376);
             this.textBoxXPosition.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxXPosition.Name = "textBoxXPosition";
             this.textBoxXPosition.Size = new System.Drawing.Size(73, 28);
@@ -613,7 +627,7 @@
             // textBoxYPosition
             // 
             this.textBoxYPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxYPosition.Location = new System.Drawing.Point(1082, 349);
+            this.textBoxYPosition.Location = new System.Drawing.Point(1088, 412);
             this.textBoxYPosition.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxYPosition.Name = "textBoxYPosition";
             this.textBoxYPosition.Size = new System.Drawing.Size(73, 28);
@@ -624,7 +638,7 @@
             // textBoxZPosition
             // 
             this.textBoxZPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxZPosition.Location = new System.Drawing.Point(1082, 388);
+            this.textBoxZPosition.Location = new System.Drawing.Point(1088, 451);
             this.textBoxZPosition.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxZPosition.Name = "textBoxZPosition";
             this.textBoxZPosition.Size = new System.Drawing.Size(73, 28);
@@ -635,7 +649,7 @@
             // buttonClearChart
             // 
             this.buttonClearChart.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClearChart.Location = new System.Drawing.Point(690, 424);
+            this.buttonClearChart.Location = new System.Drawing.Point(696, 487);
             this.buttonClearChart.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClearChart.Name = "buttonClearChart";
             this.buttonClearChart.Size = new System.Drawing.Size(64, 92);
@@ -712,13 +726,14 @@
             this.textBoxSerialOut.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSerialOut.Multiline = true;
             this.textBoxSerialOut.Name = "textBoxSerialOut";
+            this.textBoxSerialOut.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxSerialOut.Size = new System.Drawing.Size(267, 151);
             this.textBoxSerialOut.TabIndex = 233;
             // 
             // buttonClearIncoming
             // 
             this.buttonClearIncoming.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClearIncoming.Location = new System.Drawing.Point(7, 670);
+            this.buttonClearIncoming.Location = new System.Drawing.Point(10, 747);
             this.buttonClearIncoming.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClearIncoming.Name = "buttonClearIncoming";
             this.buttonClearIncoming.Size = new System.Drawing.Size(269, 28);
@@ -729,7 +744,7 @@
             // 
             // textBoxSerialIn
             // 
-            this.textBoxSerialIn.Location = new System.Drawing.Point(8, 518);
+            this.textBoxSerialIn.Location = new System.Drawing.Point(11, 595);
             this.textBoxSerialIn.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSerialIn.Multiline = true;
             this.textBoxSerialIn.Name = "textBoxSerialIn";
@@ -739,7 +754,7 @@
             // textBoxADCsps
             // 
             this.textBoxADCsps.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxADCsps.Location = new System.Drawing.Point(487, 439);
+            this.textBoxADCsps.Location = new System.Drawing.Point(487, 406);
             this.textBoxADCsps.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxADCsps.Name = "textBoxADCsps";
             this.textBoxADCsps.Size = new System.Drawing.Size(98, 28);
@@ -750,7 +765,7 @@
             // buttonADCsps
             // 
             this.buttonADCsps.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonADCsps.Location = new System.Drawing.Point(308, 439);
+            this.buttonADCsps.Location = new System.Drawing.Point(308, 406);
             this.buttonADCsps.Margin = new System.Windows.Forms.Padding(2);
             this.buttonADCsps.Name = "buttonADCsps";
             this.buttonADCsps.Size = new System.Drawing.Size(175, 28);
@@ -762,7 +777,7 @@
             // buttonADCreset
             // 
             this.buttonADCreset.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonADCreset.Location = new System.Drawing.Point(308, 478);
+            this.buttonADCreset.Location = new System.Drawing.Point(308, 445);
             this.buttonADCreset.Margin = new System.Windows.Forms.Padding(2);
             this.buttonADCreset.Name = "buttonADCreset";
             this.buttonADCreset.Size = new System.Drawing.Size(175, 28);
@@ -774,7 +789,7 @@
             // buttonProbeLift
             // 
             this.buttonProbeLift.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonProbeLift.Location = new System.Drawing.Point(308, 591);
+            this.buttonProbeLift.Location = new System.Drawing.Point(308, 595);
             this.buttonProbeLift.Margin = new System.Windows.Forms.Padding(2);
             this.buttonProbeLift.Name = "buttonProbeLift";
             this.buttonProbeLift.Size = new System.Drawing.Size(175, 28);
@@ -786,7 +801,7 @@
             // buttonProbeDrop
             // 
             this.buttonProbeDrop.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonProbeDrop.Location = new System.Drawing.Point(308, 629);
+            this.buttonProbeDrop.Location = new System.Drawing.Point(308, 633);
             this.buttonProbeDrop.Margin = new System.Windows.Forms.Padding(2);
             this.buttonProbeDrop.Name = "buttonProbeDrop";
             this.buttonProbeDrop.Size = new System.Drawing.Size(175, 28);
@@ -798,7 +813,7 @@
             // buttonProbeEnable
             // 
             this.buttonProbeEnable.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonProbeEnable.Location = new System.Drawing.Point(487, 591);
+            this.buttonProbeEnable.Location = new System.Drawing.Point(487, 595);
             this.buttonProbeEnable.Margin = new System.Windows.Forms.Padding(2);
             this.buttonProbeEnable.Name = "buttonProbeEnable";
             this.buttonProbeEnable.Size = new System.Drawing.Size(172, 28);
@@ -810,7 +825,7 @@
             // buttonProbeDisable
             // 
             this.buttonProbeDisable.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonProbeDisable.Location = new System.Drawing.Point(487, 629);
+            this.buttonProbeDisable.Location = new System.Drawing.Point(487, 633);
             this.buttonProbeDisable.Margin = new System.Windows.Forms.Padding(2);
             this.buttonProbeDisable.Name = "buttonProbeDisable";
             this.buttonProbeDisable.Size = new System.Drawing.Size(172, 28);
@@ -822,7 +837,7 @@
             // buttonSetTappingFreq
             // 
             this.buttonSetTappingFreq.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSetTappingFreq.Location = new System.Drawing.Point(308, 667);
+            this.buttonSetTappingFreq.Location = new System.Drawing.Point(308, 671);
             this.buttonSetTappingFreq.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSetTappingFreq.Name = "buttonSetTappingFreq";
             this.buttonSetTappingFreq.Size = new System.Drawing.Size(175, 28);
@@ -834,7 +849,7 @@
             // textBoxTappingFreq
             // 
             this.textBoxTappingFreq.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxTappingFreq.Location = new System.Drawing.Point(488, 667);
+            this.textBoxTappingFreq.Location = new System.Drawing.Point(488, 671);
             this.textBoxTappingFreq.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTappingFreq.Name = "textBoxTappingFreq";
             this.textBoxTappingFreq.Size = new System.Drawing.Size(98, 28);
@@ -930,7 +945,7 @@
             this.textBoxStepperSpeedX.Name = "textBoxStepperSpeedX";
             this.textBoxStepperSpeedX.Size = new System.Drawing.Size(72, 28);
             this.textBoxStepperSpeedX.TabIndex = 260;
-            this.textBoxStepperSpeedX.Text = "100";
+            this.textBoxStepperSpeedX.Text = "1000";
             this.textBoxStepperSpeedX.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // buttonSetStepperSpeed
@@ -956,7 +971,7 @@
             this.textBoxStepperSpeedY.Name = "textBoxStepperSpeedY";
             this.textBoxStepperSpeedY.Size = new System.Drawing.Size(72, 28);
             this.textBoxStepperSpeedY.TabIndex = 263;
-            this.textBoxStepperSpeedY.Text = "100";
+            this.textBoxStepperSpeedY.Text = "1000";
             this.textBoxStepperSpeedY.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // buttonZeroX
@@ -1040,7 +1055,7 @@
             this.buttonStart.BackColor = System.Drawing.Color.PaleGreen;
             this.buttonStart.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.buttonStart.Font = new System.Drawing.Font("Calibri", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonStart.Location = new System.Drawing.Point(690, 305);
+            this.buttonStart.Location = new System.Drawing.Point(696, 368);
             this.buttonStart.Margin = new System.Windows.Forms.Padding(2);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(217, 39);
@@ -1116,7 +1131,7 @@
             // 
             // textBoxStatus
             // 
-            this.textBoxStatus.Location = new System.Drawing.Point(691, 565);
+            this.textBoxStatus.Location = new System.Drawing.Point(693, 629);
             this.textBoxStatus.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxStatus.Multiline = true;
             this.textBoxStatus.Name = "textBoxStatus";
@@ -1128,7 +1143,7 @@
             // buttonClearStatus
             // 
             this.buttonClearStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClearStatus.Location = new System.Drawing.Point(839, 527);
+            this.buttonClearStatus.Location = new System.Drawing.Point(841, 591);
             this.buttonClearStatus.Margin = new System.Windows.Forms.Padding(2);
             this.buttonClearStatus.Name = "buttonClearStatus";
             this.buttonClearStatus.Size = new System.Drawing.Size(176, 32);
@@ -1213,7 +1228,7 @@
             // buttonADCoffs
             // 
             this.buttonADCoffs.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonADCoffs.Location = new System.Drawing.Point(487, 477);
+            this.buttonADCoffs.Location = new System.Drawing.Point(487, 444);
             this.buttonADCoffs.Name = "buttonADCoffs";
             this.buttonADCoffs.Size = new System.Drawing.Size(172, 30);
             this.buttonADCoffs.TabIndex = 292;
@@ -1224,7 +1239,7 @@
             // buttonCancelTest
             // 
             this.buttonCancelTest.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCancelTest.Location = new System.Drawing.Point(690, 350);
+            this.buttonCancelTest.Location = new System.Drawing.Point(696, 413);
             this.buttonCancelTest.Name = "buttonCancelTest";
             this.buttonCancelTest.Size = new System.Drawing.Size(217, 31);
             this.buttonCancelTest.TabIndex = 293;
@@ -1235,7 +1250,7 @@
             // buttonTestReset
             // 
             this.buttonTestReset.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonTestReset.Location = new System.Drawing.Point(690, 387);
+            this.buttonTestReset.Location = new System.Drawing.Point(696, 450);
             this.buttonTestReset.Name = "buttonTestReset";
             this.buttonTestReset.Size = new System.Drawing.Size(217, 30);
             this.buttonTestReset.TabIndex = 294;
@@ -1280,7 +1295,7 @@
             // 
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Location = new System.Drawing.Point(763, 424);
+            this.chart1.Location = new System.Drawing.Point(769, 487);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -1291,12 +1306,39 @@
             this.chart1.TabIndex = 299;
             this.chart1.Text = "chart1";
             // 
+            // numericUpDownScanSpeed
+            // 
+            this.numericUpDownScanSpeed.DecimalPlaces = 2;
+            this.numericUpDownScanSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numericUpDownScanSpeed.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.numericUpDownScanSpeed.Location = new System.Drawing.Point(692, 239);
+            this.numericUpDownScanSpeed.Margin = new System.Windows.Forms.Padding(2);
+            this.numericUpDownScanSpeed.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.numericUpDownScanSpeed.Name = "numericUpDownScanSpeed";
+            this.numericUpDownScanSpeed.Size = new System.Drawing.Size(141, 28);
+            this.numericUpDownScanSpeed.TabIndex = 302;
+            this.numericUpDownScanSpeed.Value = new decimal(new int[] {
+            5,
+            0,
+            0,
+            65536});
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1184, 741);
+            this.ClientSize = new System.Drawing.Size(1177, 814);
+            this.Controls.Add(label22);
+            this.Controls.Add(this.numericUpDownScanSpeed);
             this.Controls.Add(label21);
             this.Controls.Add(label20);
             this.Controls.Add(this.chart1);
@@ -1389,7 +1431,7 @@
             this.Controls.Add(this.comboBoxCOMPorts);
             this.Controls.Add(this.buttonConnectDisconnect);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.MaximumSize = new System.Drawing.Size(1200, 780);
+            this.MaximumSize = new System.Drawing.Size(1400, 900);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MECH 423 Final Project";
@@ -1401,6 +1443,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResolution)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAdjust)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownScanSpeed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1474,6 +1517,7 @@
         private System.Windows.Forms.TextBox textBoxManualCommand;
         private System.Windows.Forms.Button buttonSendManualCommand;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.NumericUpDown numericUpDownScanSpeed;
     }
 }
 

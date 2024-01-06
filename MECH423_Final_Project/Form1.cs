@@ -41,7 +41,7 @@ namespace MECH423_Final_Project
 
         int ADCsps = 0;
         int tappingFreq = 0; // Frequency of probe
-        int stepperSpeedX = 0, stepperSpeedY = 0;
+        int stepperSpeedX = 1000, stepperSpeedY = 1000;
         int UARTrate = 100; // [Hz] - 100 default
         bool UART_TFR_ON = false;
 
@@ -54,16 +54,26 @@ namespace MECH423_Final_Project
         double counts_offset = 0.00;
         double force_to_mm = (1.0 / 19600) * 1000;  // 19600 cN/m
 
-        double sampleWidthX = 2, sampleWidthY = 2;
-        double XYResolution = 0.5;
+        /* Test constants. Update speed on test begin or resume */
+        double sampleWidthX = 2, sampleWidthY = 2;      // mm
+        double XYResolution = 0.5;                      // mm
+        double testSpeed = 0.5;                         // mm/s
+        
+        /* Internal constants */
+        double ResetSpeed = 5000;                       // steps/s
+
         double probeAdjustResolution = 1.0;
         bool testRunning = false;
 
-        int Xmm2steps = 800, Ymm2steps = 400;
-        double Xsteps2mm = 1.0 / 800, Ysteps2mm = 1.0 / 400;
+        // Adjust based on your hardware
+        // DVD drive: 3mm pitch, 20 steps/rev
+        // T6x1: 2mm lead 200 steps/rev
+        const double Xmm2steps = 16*200/2, Ymm2steps = 800;    
+        double Xsteps2mm = 1.0 / Xmm2steps, Ysteps2mm = 1.0 / Ymm2steps;
 
         int sampleRows, sampleColumns;
         int maxPlotDataPoints = 30;
+
 
         // ~~~~~~~~~~~~~~~~~ FORM LOADING ~~~~~~~~~~~~~~~~~~~~~
         private void Form1_Load(object sender, EventArgs e)
@@ -72,8 +82,6 @@ namespace MECH423_Final_Project
             comboBoxCOMPorts.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());
             if (comboBoxCOMPorts.Items.Count == 0)
                 comboBoxCOMPorts.Text = "No COM ports!";
-            else if (comboBoxCOMPorts.Items.Count > 2)
-                comboBoxCOMPorts.SelectedIndex = 2; // Select COM4 by default
 
             //MessageBox.Show("MECH 423 - FINAL PROJECT \n\nDavid Antoniuk and Joshua Ho\n08-DEC-2023 \n\nClick OK to begin.");
             textBoxStatus.AppendText("Startup Sequence Complete \r\n--> Click ENABLE to begin \r\n");
@@ -163,25 +171,30 @@ namespace MECH423_Final_Project
             SaveFileDialog myDialogBox = new SaveFileDialog();
             myDialogBox.InitialDirectory = @"C:\Users\david\Documents\UBC Engineering\Year 4 Mechatronics\MECH 423 - Mechatronic Product Design\MECH423_Final_Project_Data";
             myDialogBox.ShowDialog();
-            textBoxFileName.Text = myDialogBox.FileName.ToString() + ".CSV";
+            String filename = myDialogBox.FileName.ToString();
+
+            textBoxFileName.Text = filename.EndsWith(".CSV") ? filename : filename + ".CSV";
         }
 
         private void checkBoxSaveToFile_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxSaveToFile.Checked == true)
                 outputFile = new StreamWriter(textBoxFileName.Text);
-            else
+            else if(outputFile != null)
+            {
+                textBoxFileName.Text = "";
                 outputFile.Close();
+            }  
         }
 
         // ~~~~~~~~~~~~~~~~~ COMMANDS ~~~~~~~~~~~~~~~~~~~~~
 
         private void buttonHomeXY_Click(object sender, EventArgs e)
         {
-            String homeCmd = "coil:lift; XY:SP 3000,3000; Join; XY:abs 0,0; Join; coil:off; XY:SP 100,100";
+
+            String homeCmd = "coil:lift; XY:SP 3000,3000; Join; XY:abs 0,0; Join; coil:off;";
             sendSCPI(homeCmd);
-            textBoxStepperSpeedX.Text = 100.ToString();
-            textBoxStepperSpeedY.Text = 100.ToString();
+            sendSCPI($"XY:sp {stepperSpeedX},{stepperSpeedY}");
         }
 
         private void buttonZeroX_Click(object sender, EventArgs e)
@@ -421,37 +434,66 @@ namespace MECH423_Final_Project
                 sampleWidthX = (double)numericUpDownXWidth.Value;
                 sampleWidthY = (double)numericUpDownYWidth.Value;
                 XYResolution = (double)numericUpDownResolution.Value;
+                testSpeed = (double)numericUpDownScanSpeed.Value;
+
+                int xTestSpeed = (int)(testSpeed * Xmm2steps);
+                int yTestSpeed = (int)(testSpeed * Ymm2steps);
+                //int incrementX = (int)(XYResolution * Xmm2steps);
+                //int incrementY = (int)(XYResolution * Ymm2steps); // ca cause le FLOATING POINT ERROR 
+                //double discreteResolutionY = incrementY * Ysteps2mm;
+                //double discreteResolutionX = incrementX * Xsteps2mm;
 
                 sampleRows = (int)(sampleWidthY / XYResolution) + 1;
                 sampleColumns = (int)(sampleWidthX / XYResolution) + 1;
 
-                int incrementX = (int)(XYResolution * Xmm2steps);
-                int incrementY = (int)(XYResolution * Ymm2steps);
-
                 int Xtarget = 0;
                 int Ytarget = 0;
 
-                sendSCPIasync("coil:lift; XY:sp 3000,3000; XY:abs 0,0; join", "SETUP\r\n");
+                sendSCPIasync("coil:lift; XY:sp 4000,4000; XY:abs 0,0; join", "SETUP\r\n");
 
+#if reverseXY
                 for (int currentRow = 0; currentRow < sampleRows; currentRow++) // Step along Y axis
                 {
-                    sendSCPIasync("join;XY:sp 120,120", "SET SPEED\r\n");  // Set slow speed for scans
-                    Ytarget = incrementY * currentRow;
-                    sendSCPIasync("join;Y:abs " + (Ytarget), "INCREMENT Y\r\n");
+                    sendSCPIasync($"join;XY:sp {xTestSpeed},{yTestSpeed}", "SET SPEED\r\n");  // Set slow speed for scans
+                    Xtarget = (int)(XYResolution * Xmm2steps * currentRow );
+                    sendSCPIasync("join;X:abs " + (Xtarget), "INCREMENT X\r\n");
                     sendSCPIasync("join;coil:off", $"Measuring row {currentRow + 1} of {sampleRows}...\r\n");         // Drop or switch off coil for measurement                                                                                                 //textBoxStatus.AppendText("Measuring row " + (currentRow+1) + " of " + sampleRows + "...\r\n");
                     sendSCPIasync("pause 600");
                     for (int currentColumn = 0; currentColumn < sampleColumns; currentColumn++)
                     {
-                        Xtarget = incrementX * currentColumn;
-                        sendSCPIasync("join;X:abs " + (Xtarget), "INCREMENT X\r\n");
-                        sendSCPIasync("join;pause 150", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
+                        Ytarget = (int)(XYResolution * Ymm2steps * currentColumn);
+                        sendSCPIasync("join;Y:abs " + (Ytarget), "INCREMENT Y\r\n");
+                        sendSCPIasync("join", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
                     }
-                    //sendSCPIasync("join", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
+                    sendSCPIasync("join;pause 100", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
                     sendSCPIasync("join; coil:lift", "LIFT PROBE\r\n");                       // Lift coil for travel
-                    sendSCPIasync("join; XY:sp 5000,5000; X:abs 0", "Row done\r\n");  // Reset X at fast speed
+                    sendSCPIasync("join; XY:sp 4000,4000; Y:abs 0", "Row done\r\n");  // Reset X at fast speed
                 }
                 sendSCPIasync("join;coil:lift;XY:sp 4000,4000;XY:abs 0,0", "RESET PROBE\r\n");
                 sendSCPIasync("join;coil:off", "Measurement grid complete\r\n");
+                sendSCPIasync($"XY:sp {stepperSpeedX},{stepperSpeedY}");        // Reset to user jog speed
+#else
+                for (int currentRow = 0; currentRow < sampleRows; currentRow++) // Step along Y axis
+                {
+                    sendSCPIasync($"join;XY:sp {xTestSpeed},{yTestSpeed}", "SET SPEED\r\n");  // Set slow speed for scans
+                    Ytarget = (int)(XYResolution * Ymm2steps * currentRow);
+                    sendSCPIasync("join;Y:abs " + (Ytarget), "INCREMENT Y\r\n");
+                    sendSCPIasync("join;coil:off", $"Measuring row {currentRow + 1} of {sampleRows}...\r\n");         // Drop or switch off coil for measurement                                                                                                 //textBoxStatus.AppendText("Measuring row " + (currentRow+1) + " of " + sampleRows + "...\r\n");
+                    sendSCPIasync("pause 1000");
+                    for (int currentColumn = 0; currentColumn < sampleColumns; currentColumn++)
+                    {
+                        Xtarget = (int)(XYResolution * Xmm2steps * currentColumn);
+                        sendSCPIasync("join;X:abs " + (Xtarget), "INCREMENT X\r\n");
+                        sendSCPIasync("join;pause 100", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
+                    }
+                    sendSCPIasync("join;pause 100", $"MEASURE X{Xtarget} Y{Ytarget}\r\n");
+                    sendSCPIasync("join; coil:lift", "LIFT PROBE\r\n");                       // Lift coil for travel
+                    sendSCPIasync("join; XY:sp 8000,8000; X:abs 0", "Row done\r\n");  // Reset X at fast speed
+                }
+                sendSCPIasync("join;coil:lift;XY:sp 4000,4000;XY:abs 0,0", "RESET PROBE\r\n");
+                sendSCPIasync("join;coil:off", "Measurement grid complete\r\n");
+                sendSCPIasync($"XY:sp {stepperSpeedX},{stepperSpeedY}");        // Reset to user jog speed
+#endif 
             }
         }
         private void buttonStart_Click(object sender, EventArgs e)
@@ -511,6 +553,7 @@ namespace MECH423_Final_Project
 
                     textBoxStatus.AppendText(debugOut);
 
+                    // Reading textboxes to get the values. Fix this
                     if (debugOut.Contains("MEASURE"))
                     {
                         string x = textBoxXPosition.Text;
